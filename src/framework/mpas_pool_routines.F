@@ -4238,7 +4238,7 @@ module mpas_pool_routines
               scalar => field % scalar
 #ifdef CORE_ATMOSPHERE
               if (coupler % role_includes(ROLE_INTEGRATE)) then
-                      GPUOMP !$omp target enter data map(to:field%scalar)
+                      GPUOMP !$omp target enter data map(to:scalar)
                       !$acc enter data copyin(field%scalar)
               end if
 #endif
@@ -4296,7 +4296,7 @@ module mpas_pool_routines
               array => field % array
 #ifdef CORE_ATMOSPHERE
               if (coupler % role_includes(ROLE_INTEGRATE)) then
-                      GPUOMP !$omp target enter data map(to:field%array)
+                      GPUOMP !$omp target enter data map(to:array)
                       !$acc enter data copyin(field%array)
               end if
 #endif
@@ -4354,7 +4354,7 @@ module mpas_pool_routines
               array => field % array
 #ifdef CORE_ATMOSPHERE
               if (coupler % role_includes(ROLE_INTEGRATE)) then
-                      GPUOMP !$omp target enter data map(to:field%array)
+                      GPUOMP !$omp target enter data map(to:array)
                       !$acc enter data copyin(field%array)
               end if
 #endif
@@ -4414,7 +4414,7 @@ module mpas_pool_routines
               array => field % array
 #ifdef CORE_ATMOSPHERE
               if (coupler % role_includes(ROLE_INTEGRATE)) then
-                      GPUOMP !$omp target enter data map(to:field%array)
+                      GPUOMP !$omp target enter data map(to:array)
                       !$acc enter data copyin(field%array)
               end if
 #endif
@@ -4472,7 +4472,7 @@ module mpas_pool_routines
               array => field % array
 #ifdef CORE_ATMOSPHERE
               if (coupler % role_includes(ROLE_INTEGRATE)) then
-                      GPUOMP !$omp target enter data map(to:field%array)
+                      GPUOMP !$omp target enter data map(to:array)
                       !$acc enter data copyin(field%array)
               end if
 #endif
@@ -4531,7 +4531,7 @@ module mpas_pool_routines
               array => field % array
 #ifdef CORE_ATMOSPHERE
               if (coupler % role_includes(ROLE_INTEGRATE)) then
-                      GPUOMP !$omp target enter data map(to:field%array)
+                      GPUOMP !$omp target enter data map(to:array)
                       !$acc enter data copyin(field%array)
               end if
 #endif
@@ -4590,7 +4590,7 @@ module mpas_pool_routines
               scalar => field % scalar
 #ifdef CORE_ATMOSPHERE
               if (coupler % role_includes(ROLE_INTEGRATE)) then
-                      GPUOMP !$omp target enter data map(to:field%scalar)
+                      GPUOMP !$omp target enter data map(to:scalar)
                       !$acc enter data copyin(field%scalar)
               end if
 #endif
@@ -4649,7 +4649,7 @@ module mpas_pool_routines
               array => field % array
 #ifdef CORE_ATMOSPHERE
               if (coupler % role_includes(ROLE_INTEGRATE)) then
-                      GPUOMP !$omp target enter data map(to:field%array)
+                      GPUOMP !$omp target enter data map(to:array)
                       !$acc enter data copyin(field%array)
               end if
 #endif
@@ -4708,7 +4708,7 @@ module mpas_pool_routines
               array => field % array
 #ifdef CORE_ATMOSPHERE
               if (coupler % role_includes(ROLE_INTEGRATE)) then
-                      GPUOMP !$omp target enter data map(to:field%array)
+                      GPUOMP !$omp target enter data map(to:array)
                       !$acc enter data copyin(field%array)
               end if
 #endif
@@ -4767,7 +4767,7 @@ module mpas_pool_routines
               array => field % array
 #ifdef CORE_ATMOSPHERE
               if (coupler % role_includes(ROLE_INTEGRATE)) then
-                      GPUOMP !$omp target enter data map(to:field%array)
+                      GPUOMP !$omp target enter data map(to:array)
                       !$acc enter data copyin(field%array)
               end if
 #endif

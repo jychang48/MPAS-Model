@@ -502,6 +502,7 @@ GPUOMP !$omp gpu_idx_recv_c_2_v, gpu_dimsizes_c_2_v, gpu_nHaloLayers_c_2_v)
       ! Local variables for indexing
       integer :: levelsIdx, scalarsIdx, cellsIdx
       integer :: tmpnum_scalars, tmpnCells, tmpnVertLevels, tmpnEdges
+      integer :: nCellsPlusOne
       !
       ! Retrieve configuration options
       !
@@ -2180,6 +2181,7 @@ CPUOMP !$OMP END PARALLEL DO
          call mpas_pool_get_dimension(block % dimensions, 'cellSolveThreadStart', cellSolveThreadStart)
          call mpas_pool_get_dimension(block % dimensions, 'cellSolveThreadEnd', cellSolveThreadEnd)
 
+         nCellsPlusOne = nCells+1
          if(config_convection_scheme == 'cu_grell_freitas'          .or. &
             config_convection_scheme == 'cu_tiedtke'                .or. &
             config_convection_scheme == 'cu_ntiedtke') then
@@ -2196,7 +2198,7 @@ CPUOMP !$OMP END PARALLEL DO
 GPUOMP !$omp target teams distribute parallel do simd collapse(2)
 !$acc parallel vector_length(128)
 !$acc loop gang vector collapse(2)
-               do cellsIdx=1,nCells+1
+               do cellsIdx=1,nCellsPlusOne
                  do levelsIdx=1,nVertLevels
                    rqvdynten(levelsIdx,cellsIdx) = ( scalars_2(index_qv,levelsIdx,cellsIdx) - scalars_1(index_qv,levelsIdx,cellsIdx) ) / config_dt
                  end do
@@ -2208,7 +2210,7 @@ GPUOMP !$omp end target teams distribute parallel do simd
 GPUOMP !$omp target teams distribute parallel do simd collapse(2)
 !$acc parallel vector_length(128)
 !$acc loop gang vector collapse(2)
-               do cellsIdx=1,nCells+1
+               do cellsIdx=1,nCellsPlusOne
                  do levelsIdx=1,nVertLevels
                    rqvdynten(levelsIdx,cellsIdx) = 0._RKIND
                  end do
@@ -2224,7 +2226,7 @@ GPUOMP !$omp end target teams distribute parallel do simd
 GPUOMP !$omp target teams distribute parallel do simd collapse(3)
 !$acc parallel vector_length(128)
 !$acc loop gang vector collapse(3)
-         do cellsIdx=1,nCells+1
+         do cellsIdx=1,nCellsPlusOne
            do levelsIdx=1,nVertLevels
              do scalarsIdx=1,num_scalars
                if (scalars_2(scalarsIdx,levelsIdx,cellsIdx)<0.0) scalars_2(scalarsIdx,levelsIdx,cellsIdx) = 0.0
@@ -2790,7 +2792,8 @@ TMPOMP !$omp target update from(cqw,cqu,qtot,tend_ru_physics,tend_rtheta_physics
       integer :: iCell, k, iq
       real (kind=RKIND) :: dtseps, c2, qtotal, rcv
       real (kind=RKIND), dimension( nVertLevels ,nCells+1) :: b_tri, c_tri
-GPUOMP !$omp target data map(alloc:b_tri,c_tri)
+GPUOMP !$omp target enter data map(alloc:b_tri)
+GPUOMP !$omp target enter data map(alloc:c_tri)
 TMPOMP !$omp target update to(cofrz, gamma_tri, a_tri, alpha_tri, &
 TMPOMP !$omp coftz, cofwr, cofwt, cofwz, &
 TMPOMP !$omp rdzw, cqw, fzm, fzp, p, pb, qtot, rb, rdzu, rt, rtb, t, zz)
@@ -2907,7 +2910,7 @@ GPUOMP !$omp end target teams distribute !parallel do
 TMPOMP !$omp target update from(cofrz,cofwz,cofwr,coftz,cofwt,a_tri,gamma_tri,alpha_tri)
 
 !$acc end data
-GPUOMP !$omp end target data
+
    end subroutine atm_compute_vert_imp_coefs_work
 
 

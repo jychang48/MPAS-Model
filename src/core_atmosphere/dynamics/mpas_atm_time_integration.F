@@ -502,7 +502,7 @@ GPUOMP !$omp gpu_idx_recv_c_2_v, gpu_dimsizes_c_2_v, gpu_nHaloLayers_c_2_v)
       ! Local variables for indexing
       integer :: levelsIdx, scalarsIdx, cellsIdx
       integer :: tmpnum_scalars, tmpnCells, tmpnVertLevels, tmpnEdges
-      integer :: nCellsPlusOne
+      integer :: nCellsPlusOne,nVertLevels_noptr,num_Scalars_noptr
       !
       ! Retrieve configuration options
       !
@@ -2181,7 +2181,9 @@ CPUOMP !$OMP END PARALLEL DO
          call mpas_pool_get_dimension(block % dimensions, 'cellSolveThreadStart', cellSolveThreadStart)
          call mpas_pool_get_dimension(block % dimensions, 'cellSolveThreadEnd', cellSolveThreadEnd)
 
-         nCellsPlusOne = nCells+1
+         nCellsPlusOne = nCells + 1
+         nVertLevels_noptr = nVertLevels
+         num_scalars_noptr = num_scalars
          if(config_convection_scheme == 'cu_grell_freitas'          .or. &
             config_convection_scheme == 'cu_tiedtke'                .or. &
             config_convection_scheme == 'cu_ntiedtke') then
@@ -2199,7 +2201,7 @@ GPUOMP !$omp target teams distribute parallel do simd collapse(2)
 !$acc parallel vector_length(128)
 !$acc loop gang vector collapse(2)
                do cellsIdx=1,nCellsPlusOne
-                 do levelsIdx=1,nVertLevels
+                 do levelsIdx=1,nVertLevels_noptr
                    rqvdynten(levelsIdx,cellsIdx) = ( scalars_2(index_qv,levelsIdx,cellsIdx) - scalars_1(index_qv,levelsIdx,cellsIdx) ) / config_dt
                  end do
                end do
@@ -2211,7 +2213,7 @@ GPUOMP !$omp target teams distribute parallel do simd collapse(2)
 !$acc parallel vector_length(128)
 !$acc loop gang vector collapse(2)
                do cellsIdx=1,nCellsPlusOne
-                 do levelsIdx=1,nVertLevels
+                 do levelsIdx=1,nVertLevels_noptr
                    rqvdynten(levelsIdx,cellsIdx) = 0._RKIND
                  end do
                end do
@@ -2227,8 +2229,8 @@ GPUOMP !$omp target teams distribute parallel do simd collapse(3)
 !$acc parallel vector_length(128)
 !$acc loop gang vector collapse(3)
          do cellsIdx=1,nCellsPlusOne
-           do levelsIdx=1,nVertLevels
-             do scalarsIdx=1,num_scalars
+           do levelsIdx=1,nVertLevels_noptr
+             do scalarsIdx=1,num_scalars_noptr
                if (scalars_2(scalarsIdx,levelsIdx,cellsIdx)<0.0) scalars_2(scalarsIdx,levelsIdx,cellsIdx) = 0.0
              end do
            end do

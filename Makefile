@@ -100,7 +100,7 @@ ftn-offload:
 	"FC_SERIAL = ftn" \
 	"CC_SERIAL = cc" \
 	"CXX_SERIAL = CC" \
-	"FFLAGS_PROMOTION = -default64" \
+	"FFLAGS_PROMOTION = -s default64" \
 	"FFLAGS_OPT = -s integer32 -O2 -f free -N 1023 -em -ef -hlist=aimd" \
 	"CFLAGS_OPT = -O2" \
 	"LDFLAGS_OPT = -O2 -fopenmp" \

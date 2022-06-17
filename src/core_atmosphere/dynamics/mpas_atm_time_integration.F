@@ -6231,15 +6231,15 @@ GPUOMP !$omp end parallel do simd
          GPUOMP wduz(k) = 0
          GPUOMP wduz(nVertLevels+1) = 0
 !$acc loop vector shortloop
-         GPUACC do k=1,nVertLevels+1,nVertLevels
-         GPUACC    wduz(k) = 0.
-         GPUACC end do
-         GPUOMP wduz(2) = 0.5*( rw(2,cell1)+rw(2,cell2))*(fzm(2)*tend_wk(2)+fzp(2)*tend_wk(2-1))
-         GPUOMP wduz(nVertLevels) = 0.5*( rw(nVertLevels,cell1)+rw(nVertLevels,cell2))*(fzm(nVertLevels)*tend_wk(nVertLevels)+fzp(nVertLevels)*tend_wk(nVertLevels-1))
+         do k=1,nVertLevels+1,nVertLevels
+            wduz(k) = 0.
+         end do
+         !GPUOMP wduz(2) = 0.5*( rw(2,cell1)+rw(2,cell2))*(fzm(2)*tend_wk(2)+fzp(2)*tend_wk(2-1))
+         !GPUOMP wduz(nVertLevels) = 0.5*( rw(nVertLevels,cell1)+rw(nVertLevels,cell2))*(fzm(nVertLevels)*tend_wk(nVertLevels)+fzp(nVertLevels)*tend_wk(nVertLevels-1))
 !$acc loop vector shortloop
-         GPUACC do k=2,nVertLevels,nVertLevels-2
-         GPUACC    wduz(k) = 0.5*( rw(k,cell1)+rw(k,cell2))*(fzm(k)*tend_wk(k)+fzp(k)*tend_wk(k-1))
-         GPUACC end do
+         do k=2,nVertLevels,nVertLevels-2
+            wduz(k) = 0.5*( rw(k,cell1)+rw(k,cell2))*(fzm(k)*tend_wk(k)+fzp(k)*tend_wk(k-1))
+         end do
 GPUOMP !$omp parallel do simd
 !$acc loop vector
          do k=3,nVertLevels-1
@@ -7455,18 +7455,18 @@ GPUOMP !$omp parallel do simd
          end do
 GPUOMP !$omp end parallel do simd
 
-         GPUOMP wduz(1) = 0
-         GPUOMP wduz(nVertLevels+1) = 0
+         !GPUOMP wduz(1) = 0
+         !GPUOMP wduz(nVertLevels+1) = 0
 !$acc loop vector shortloop
-         GPUACC do k=1,nVertLevels+1,nVertLevels
-         GPUACC    wduz(k) = 0.
-         GPUACC end do
-         GPUOMP wduz(2) = 0.5*( rw(2,cell1)+rw(2,cell2))*(fzm(2)*tend_wk(2)+fzp(2)*tend_wk(2-1))
-         GPUOMP wduz(nVertLevels) = 0.5*( rw(nVertLevels,cell1)+rw(nVertLevels,cell2))*(fzm(nVertLevels)*tend_wk(nVertLevels)+fzp(nVertLevels)*tend_wk(nVertLevels-1))
+         do k=1,nVertLevels+1,nVertLevels
+            wduz(k) = 0.
+         end do
+         !GPUOMP wduz(2) = 0.5*( rw(2,cell1)+rw(2,cell2))*(fzm(2)*tend_wk(2)+fzp(2)*tend_wk(2-1))
+         !GPUOMP wduz(nVertLevels) = 0.5*( rw(nVertLevels,cell1)+rw(nVertLevels,cell2))*(fzm(nVertLevels)*tend_wk(nVertLevels)+fzp(nVertLevels)*tend_wk(nVertLevels-1))
 !$acc loop vector shortloop
-         GPUACC do k=2,nVertLevels,nVertLevels-2
-         GPUACC    wduz(k) = 0.5*( rw(k,cell1)+rw(k,cell2))*(fzm(k)*tend_wk(k)+fzp(k)*tend_wk(k-1))
-         GPUACC end do
+         do k=2,nVertLevels,nVertLevels-2
+            wduz(k) = 0.5*( rw(k,cell1)+rw(k,cell2))*(fzm(k)*tend_wk(k)+fzp(k)*tend_wk(k-1))
+         end do
 
 GPUOMP !$omp parallel do simd
 !$acc loop vector
